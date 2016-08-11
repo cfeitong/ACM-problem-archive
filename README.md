@@ -3,7 +3,6 @@ prblem archive of my teammates and me
 
 filename rule
 -----------
-[OJ]-[problm-id].[c/cpp/java]
-
-*simple explaination should be written in comments*
+[difficulty]-[OJ]-[problm-id].[c/cpp/java]
+difficulty is ranging from 0 to 10. Higher difficulty number means more difficult.
 
