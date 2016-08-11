@@ -1,7 +1,7 @@
-prblem archive of my teamates and mine
+prblem archive of my teammates and me
 --------------------------------------
 
-naming rule
+filename rule
 -----------
 [OJ]-[problm-id].[c/cpp/java]
 
