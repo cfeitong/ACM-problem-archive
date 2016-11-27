@@ -52,76 +52,51 @@ typedef vector<int>           VI;
 typedef vector<PII>           VII;
 typedef vector<vector<PII> >  VVI;
 
-void in(LD       &v) {scanf("%Lf",  &v);}
-void in(LL       &v) {scanf("%lld", &v);}
-void in(int      &v) {scanf("%d",   &v);}
-void in(char     *v) {scanf("%s",    v);}
-void in(char     &v) {scanf("%c",   &v);}
-void in(unsigned &v) {scanf("%u",   &v);}
-void in(string   &v) {cin >> v;}
-template<typename T, typename... Args> void in(T &v, Args &...args) {in(v); in(args...);}
+bool in(LD       &v) {return scanf("%Lf",  &v)!=EOF;}
+bool in(LL       &v) {return scanf("%lld", &v)!=EOF;}
+bool in(int      &v) {return scanf("%d",   &v)!=EOF;}
+bool in(char     *v) {return scanf("%s",    v)!=EOF;}
+bool in(char     &v) {return scanf("%c",   &v)!=EOF;}
+bool in(unsigned &v) {return scanf("%u",   &v)!=EOF;}
+bool in(string   &v) {return (bool)(cin >> v);}
+template<typename T, typename... Args> bool in(T &v, Args &...args) {bool ret = in(v); return ret && in(args...);}
 
-void out(LD       v) {printf("%Lf ",  v);}
-void out(LL       v) {printf("%lld ", v);}
-void out(int      v) {printf("%d ",   v);}
-void out(char     v) {printf("%c",    v);}
-void out(unsigned v) {printf("%u ",   v);}
-void out(string   v) {printf("%s",    v.c_str());}
+void out(LD          v) {printf("%Lf",  v);}
+void out(LL          v) {printf("%lld", v);}
+void out(int         v) {printf("%d",   v);}
+void out(char        v) {printf("%c",    v);}
+void out(unsigned    v) {printf("%u",   v);}
+void out(string      v) {printf("%s",    v.c_str());}
+void out(const char *v) {printf("%s",    v);}
 template<typename T> void out(vector<T> &v) {for (int i = 0; i < (int)v.size(); i++) out(v[i]);}
-template<typename T, typename... Args> void out(T v, Args ...args) {out(v); out(args...);}
+template<typename T, typename ...Args> void out(T v, Args ...args) {out(v); out(args...);}
 
-int n;
-const int N = 202;
-int a[N];
-LL pre[N], cir[N];
+const int N = 400;
+const int MOD = 1e9;
+char s[N];
+LL memo[N][N];
 
-void calc(LL k) {
-    map<LL,LL> sav;
-    int cur_n = a[k], cur_i = 1;
-    while (sav.find(cur_n) == sav.end()) {
-        sav[cur_n] = cur_i++;
-        cur_n = a[cur_n];
+LL search(int l, int r) {
+    if (l > r) return 0;
+    if (l == r) return memo[l][r] = 1;
+    if (memo[l][r] >= 0) return memo[l][r];
+    if (s[l] != s[r]) return memo[l][r] = 0;
+    memo[l][r] = 0;
+    for (int i = l; i <= r; i++) {
+        if (s[i] == s[l]) {
+            memo[l][r] += (search(l+1, i-1) * search(i, r)) % MOD;
+        }
     }
-    cir[k] = cur_i - sav[cur_n];
-    pre[k]=  sav[cur_n];
-}
-
-LL gcd(LL a, LL b) {
-    if (!b) return a;
-    return gcd(b, a%b);
-}
-
-LL lcm(LL a, LL b) {
-    return a / gcd(a, b) * b;
+    return memo[l][r] = memo[l][r] % MOD;
 }
 
 int main() {
-#ifdef DEBUG
-    freopen("c.in", "r", stdin);
-#endif // DEBUG
-    in(n);
-    Rep(i,1,n) {
-        in(a[i]);
+#ifdef D
+    freopen("3516.in", "r", stdin);
+#endif
+    while (~scanf("%s", s)){
+        memset(memo, -1, sizeof(memo));
+        printf("%lld\n", search(0, strlen(s)-1));
     }
-
-    Rep(i,1,n)
-        calc(i);
-
-    LL ans = 1;
-    Rep(i,1,n) {
-        ans = lcm(ans, cir[i]);
-    }
-
-    LL max_pre = 0;
-    Rep(i,1,n) {
-        max_pre = max(max_pre, pre[i]);
-    }
-
-    if (ans < max_pre) {
-        ans = max_pre / ans * ans + (max_pre%ans!=0) * ans;
-    }
-
-    out(ans, '\n');
-
     return 0;
 }
