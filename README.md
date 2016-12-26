@@ -1,4 +1,4 @@
-prblem archive of my teammates and me
+personal prblem archive
 --------------------------------------
 
 filename rule
